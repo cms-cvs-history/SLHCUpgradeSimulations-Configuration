@@ -33,7 +33,8 @@ process.es_prefer_hcalHardcode = cms.ESPrefer("HcalHardcodeCalibrations", "es_ha
 # Event input
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-    'file:FourMuPt_1_50_cfi_py_GEN_SIM.root')
+	'/store/relval/CMSSW_3_6_3_SLHC3_patch1/RelValFourMuPt_1_50/GEN-SIM/DESIGN_36_V10_Gauss_special-v1/0013/7A48047C-9351-E011-933F-00261894393F.root'
+	)
 )   
 
 process.maxEvents = cms.untracked.PSet(
