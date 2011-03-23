@@ -96,12 +96,13 @@ process.simHcalUnsuppressedDigis.RelabelRules = cms.untracked.PSet(
     )
 
 process.pgen.remove(process.genJetMET)
+process.pdigi.remove(process.simHcalTriggerPrimitiveDigis)
 
 #process.mix_step = cms.Path(process.mix)
 #process.p0 = cms.Path(process.pgen)
 #process.p1 = cms.Path(process.psim)
-#process.p2 = cms.Path(process.pdigi)
-process.p2 = cms.Path(process.randomEngineStateProducer+process.mix+process.simHcalUnsuppressedDigis+process.simHcalDigis)
+process.p2 = cms.Path(process.pdigi)
+#process.p2 = cms.Path(process.randomEngineStateProducer+process.mix+process.simHcalUnsuppressedDigis+process.simHcalDigis)
 process.endjob_step             = cms.Path(process.endOfProcess)
 process.outpath = cms.EndPath(process.output)
 process.schedule = cms.Schedule(process.p2,
