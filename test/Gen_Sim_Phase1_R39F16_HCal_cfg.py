@@ -85,7 +85,7 @@ process.generator = cms.EDFilter("Pythia6GeneratorFilter",
 
 #myOutputCommands = cms.untracked.vstring('keep *')
 myOutputCommands = cms.untracked.vstring()
-myOutputCommands.extend(process.FEVTSIMEventContent.outputCommands)
+myOutputCommands.extend(process.FEVTDEBUGEventContent.outputCommands)
 myOutputCommands.extend([
     'keep *_hcalDigis_*_*', 'keep *_simHcalUnsuppressedDigis_*_*',
     'keep *_towerMakerWithHO_*_*'
