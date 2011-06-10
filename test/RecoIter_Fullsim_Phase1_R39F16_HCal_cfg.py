@@ -23,7 +23,7 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.load('Configuration.EventContent.EventContent_cff')
 
 process.configurationMetadata = cms.untracked.PSet(
-    version = cms.untracked.string('$Revision: 1.13 $'),
+    version = cms.untracked.string('$Revision: 1.1 $'),
     annotation = cms.untracked.string('step2 nevts:100'),
     name = cms.untracked.string('PyReleaseValidation')
 )
@@ -37,7 +37,7 @@ process.options = cms.untracked.PSet(
 # Input source
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-	'file:/uscms_data/d2/brownson/slhc/integration/420_Port/HCal/CMSSW_4_2_3_SLHC_pre1/src/FourMuPt_1_50_cfi_py_GEN_SIM.root'
+       '/store/relval/CMSSW_4_2_3_SLHC3/RelValFourMuPt_1_50/GEN-SIM/DESIGN42_V11_110608_special-v1/0092/F6FFA9DA-7492-E011-92C8-0026189438FC.root'
     )
 )
 # Output definition
