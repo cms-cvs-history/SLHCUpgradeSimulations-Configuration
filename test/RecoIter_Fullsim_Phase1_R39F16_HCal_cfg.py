@@ -23,7 +23,7 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.load('Configuration.EventContent.EventContent_cff')
 
 process.configurationMetadata = cms.untracked.PSet(
-    version = cms.untracked.string('$Revision: 1.1 $'),
+    version = cms.untracked.string('$Revision: 1.2 $'),
     annotation = cms.untracked.string('step2 nevts:100'),
     name = cms.untracked.string('PyReleaseValidation')
 )
@@ -37,7 +37,7 @@ process.options = cms.untracked.PSet(
 # Input source
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-       '/store/relval/CMSSW_4_2_3_SLHC3/RelValFourMuPt_1_50/GEN-SIM/DESIGN42_V11_110608_special-v1/0092/F6FFA9DA-7492-E011-92C8-0026189438FC.root'
+       'file:FourMuPt_1_200_cfi_GEN_SIM.root'
     )
 )
 # Output definition
@@ -101,41 +101,48 @@ process.PixelCPEGenericESProducer.DoCosmics = False
 
 ## CPE for other steps
 process.siPixelRecHits.CPE = cms.string('PixelCPEGeneric')
-process.newPixelRecHits.CPE = cms.string('PixelCPEGeneric')
-process.secPixelRecHits.CPE = cms.string('PixelCPEGeneric')
-process.thPixelRecHits.CPE = cms.string('PixelCPEGeneric')
-process.preFilterZeroStepTracks.TTRHBuilder = cms.string('WithTrackAngle')
-process.preFilterStepOneTracks.TTRHBuilder = cms.string('WithTrackAngle')
-process.secWithMaterialTracks.TTRHBuilder = cms.string('WithTrackAngle')
-process.thWithMaterialTracks.TTRHBuilder = cms.string('WithTrackAngle')
-process.fourthWithMaterialTracks.TTRHBuilder = cms.string('WithTrackAngle')
-process.fifthWithMaterialTracks.TTRHBuilder = cms.string('WithTrackAngle')
+process.initialStepTracks.TTRHBuilder = cms.string('WithTrackAngle')
+process.lowPtTripletStepTracks.TTRHBuilder = cms.string('WithTrackAngle')
+process.pixelPairStepTracks.TTRHBuilder = cms.string('WithTrackAngle')
+process.detachedTripletStepTracks.TTRHBuilder = cms.string('WithTrackAngle')
+process.mixedTripletStepTracks.TTRHBuilder = cms.string('WithTrackAngle')
+process.pixelLessStepTracks.TTRHBuilder = cms.string('WithTrackAngle')
+process.tobTecStepTracks.TTRHBuilder = cms.string('WithTrackAngle')
 
 # Need these lines to stop some errors about missing siStripDigis collections.
 # should add them to fakeConditions_Phase1_cff
+process.MeasurementTracker.inactiveStripDetectorLabels = cms.VInputTag()
+process.MeasurementTracker.UseStripModuleQualityDB     = cms.bool(False)
+process.MeasurementTracker.UseStripAPVFiberQualityDB   = cms.bool(False)
 process.MeasurementTracker.UseStripStripQualityDB      = cms.bool(False)
 process.MeasurementTracker.UsePixelModuleQualityDB     = cms.bool(False)
 process.MeasurementTracker.UsePixelROCQualityDB        = cms.bool(False)
-process.newMeasurementTracker.inactiveStripDetectorLabels = cms.VInputTag()
-process.newMeasurementTracker.UseStripModuleQualityDB     = cms.bool(False)
-process.newMeasurementTracker.UseStripAPVFiberQualityDB   = cms.bool(False)
-process.newMeasurementTracker.UseStripStripQualityDB      = cms.bool(False)
-process.newMeasurementTracker.UsePixelModuleQualityDB     = cms.bool(False)
-process.newMeasurementTracker.UsePixelROCQualityDB        = cms.bool(False)
-process.secMeasurementTracker.inactiveStripDetectorLabels = cms.VInputTag()
-process.secMeasurementTracker.UseStripModuleQualityDB     = cms.bool(False)
-process.secMeasurementTracker.UseStripAPVFiberQualityDB   = cms.bool(False)
-process.secMeasurementTracker.UseStripStripQualityDB      = cms.bool(False)
-process.secMeasurementTracker.UsePixelModuleQualityDB     = cms.bool(False)
-process.secMeasurementTracker.UsePixelROCQualityDB        = cms.bool(False)
-process.thMeasurementTracker.inactiveStripDetectorLabels = cms.VInputTag()
-process.thMeasurementTracker.UseStripModuleQualityDB     = cms.bool(False)
-process.thMeasurementTracker.UseStripAPVFiberQualityDB   = cms.bool(False)
-process.thMeasurementTracker.UseStripStripQualityDB      = cms.bool(False)
-process.thMeasurementTracker.UsePixelModuleQualityDB     = cms.bool(False)
-process.thMeasurementTracker.UsePixelROCQualityDB        = cms.bool(False)
-process.fourthMeasurementTracker.inactiveStripDetectorLabels = cms.VInputTag()
-process.fifthMeasurementTracker.inactiveStripDetectorLabels = cms.VInputTag()
+process.lowPtTripletStepMeasurementTracker.inactiveStripDetectorLabels = cms.VInputTag()
+process.lowPtTripletStepMeasurementTracker.UseStripModuleQualityDB     = cms.bool(False)
+process.lowPtTripletStepMeasurementTracker.UseStripAPVFiberQualityDB   = cms.bool(False)
+process.lowPtTripletStepMeasurementTracker.UseStripStripQualityDB      = cms.bool(False)
+process.lowPtTripletStepMeasurementTracker.UsePixelModuleQualityDB     = cms.bool(False)
+process.lowPtTripletStepMeasurementTracker.UsePixelROCQualityDB        = cms.bool(False)
+process.pixelPairStepMeasurementTracker.inactiveStripDetectorLabels = cms.VInputTag()
+process.pixelPairStepMeasurementTracker.UseStripModuleQualityDB     = cms.bool(False)
+process.pixelPairStepMeasurementTracker.UseStripAPVFiberQualityDB   = cms.bool(False)
+process.pixelPairStepMeasurementTracker.UseStripStripQualityDB      = cms.bool(False)
+process.pixelPairStepMeasurementTracker.UsePixelModuleQualityDB     = cms.bool(False)
+process.pixelPairStepMeasurementTracker.UsePixelROCQualityDB        = cms.bool(False)
+process.detachedTripletStepMeasurementTracker.inactiveStripDetectorLabels = cms.VInputTag()
+process.detachedTripletStepMeasurementTracker.UseStripModuleQualityDB     = cms.bool(False)
+process.detachedTripletStepMeasurementTracker.UseStripAPVFiberQualityDB   = cms.bool(False)
+process.detachedTripletStepMeasurementTracker.UseStripStripQualityDB      = cms.bool(False)
+process.detachedTripletStepMeasurementTracker.UsePixelModuleQualityDB     = cms.bool(False)
+process.detachedTripletStepMeasurementTracker.UsePixelROCQualityDB        = cms.bool(False)
+process.mixedTripletStepMeasurementTracker.inactiveStripDetectorLabels = cms.VInputTag()
+process.mixedTripletStepMeasurementTracker.UseStripModuleQualityDB     = cms.bool(False)
+process.mixedTripletStepMeasurementTracker.UseStripAPVFiberQualityDB   = cms.bool(False)
+process.mixedTripletStepMeasurementTracker.UseStripStripQualityDB      = cms.bool(False)
+process.mixedTripletStepMeasurementTracker.UsePixelModuleQualityDB     = cms.bool(False)
+process.mixedTripletStepMeasurementTracker.UsePixelROCQualityDB        = cms.bool(False)
+process.pixelLessStepMeasurementTracker.inactiveStripDetectorLabels = cms.VInputTag()
+process.tobTecStepMeasurementTracker.inactiveStripDetectorLabels = cms.VInputTag()
 
 ### Now Validation and other user functions #########################################
 process.load("Validation.RecoTrack.cutsTPEffic_cfi")
@@ -148,18 +155,9 @@ process.quickTrackAssociatorByHits.SimToRecoDenominator = cms.string('reco')
 
 process.load('Configuration.StandardSequences.Validation_cff')
 ### look look at OOTB generalTracks and high purity collections
-### for high purity also look at 6 and 8 hit requirements
+### for high purity also look at 8 hit and pT>1 requirements
 ### some definitions in Validation/RecoTrack/python/TrackValidation_cff.py
-
 import PhysicsTools.RecoAlgos.recoTrackSelector_cfi
-
-process.cutsRecoTracksHpw6hits = PhysicsTools.RecoAlgos.recoTrackSelector_cfi.recoTrackSelector.clone()
-process.cutsRecoTracksHpw6hits.quality=cms.vstring("highPurity")
-process.cutsRecoTracksHpw6hits.minHit=cms.int32(6)
-
-process.cutsRecoTracksHpw8hits = PhysicsTools.RecoAlgos.recoTrackSelector_cfi.recoTrackSelector.clone()
-process.cutsRecoTracksHpw8hits.quality=cms.vstring("highPurity")
-process.cutsRecoTracksHpw8hits.minHit=cms.int32(8)
 
 process.cutsRecoTracksHpwbtagc = PhysicsTools.RecoAlgos.recoTrackSelector_cfi.recoTrackSelector.clone()
 process.cutsRecoTracksHpwbtagc.quality=cms.vstring("highPurity")
@@ -171,8 +169,6 @@ process.trackValidator.label=cms.VInputTag(cms.InputTag("generalTracks"),
                                            cms.InputTag("cutsRecoTracksHpwbtagc"),
                                            cms.InputTag("cutsRecoTracksZeroHp"),
                                            cms.InputTag("cutsRecoTracksFirstHp")
-#                                           cms.InputTag("cutsRecoTracksSecondHp"),
-#                                           cms.InputTag("cutsRecoTracksThirdHp")
                                            )
 #process.trackValidator.associators = ['TrackAssociatorByHits']
 process.trackValidator.associators = cms.vstring('quickTrackAssociatorByHits')
@@ -202,13 +198,13 @@ process.trackValidator.histoProducerAlgoBlock.cotThetaRes_nbin = cms.int32(120)
 process.trackValidator.histoProducerAlgoBlock.dxyRes_rangeMin = cms.double(-0.01)
 process.trackValidator.histoProducerAlgoBlock.dxyRes_rangeMax = cms.double(0.01)
 process.trackValidator.histoProducerAlgoBlock.dxyRes_nbin = cms.int32(100)
+process.trackValidator.tipTP = cms.double(3.5)
+process.trackValidator.ptMinTP = cms.double(0.9)
 
 process.slhcTracksValidation = cms.Sequence(process.cutsRecoTracksHp*
                                  process.cutsRecoTracksHpwbtagc*
                                  process.cutsRecoTracksZeroHp*
                                  process.cutsRecoTracksFirstHp*
-#                                 process.cutsRecoTracksSecondHp*
-#                                 process.cutsRecoTracksThirdHp*
                                  process.trackValidator)
 
 ############ end John's changes ###########################
@@ -243,8 +239,7 @@ process.L1simulation_step = cms.Path(process.SimL1Emulator)
 
 process.reconstruction_step 	= cms.Path(process.trackerlocalreco*
 						process.offlineBeamSpot+
-                                                process.recopixelvertexing*process.ckftracks_wodEdXandSteps2345)
-#                                                process.recopixelvertexing*process.ckftracks_wodEdXandSteps4and5)
+						process.recopixelvertexing*process.ckftracks_wodEdX)
 process.debug_step 		= cms.Path(process.anal)
 process.validation_step 	= cms.Path(process.cutsTPEffic*
 						process.cutsTPFake*
@@ -254,9 +249,10 @@ process.endjob_step 		= cms.Path(process.endOfProcess)
 process.out_step 		= cms.EndPath(process.output)
 
 # Schedule definition
+process.schedule = cms.Schedule(process.digitisation_step,process.L1simulation_step,process.reconstruction_step,process.validation_step,process.user_step,process.endjob_step,process.out_step)
 #process.schedule = cms.Schedule(process.reconstruction_step,process.endjob_step,process.out_step)
 #process.schedule = cms.Schedule(process.mix_step,process.reconstruction_step,process.validation_step,process.user_step,process.endjob_step,process.out_step)
 #process.schedule = cms.Schedule(process.mix_step,process.reconstruction_step,process.validation_step,process.endjob_step,process.out_step)
 #process.schedule = cms.Schedule(process.digitisation_step,process.L1simulation_step,process.reconstruction_step,process.validation_step,process.user_step,process.endjob_step,process.out_step)
-process.schedule = cms.Schedule(process.digitisation_step,process.L1simulation_step,process.reconstruction_step,process.validation_step,process.endjob_step,process.out_step)
+#process.schedule = cms.Schedule(process.digitisation_step,process.L1simulation_step,process.endjob_step,process.out_step)
 
