@@ -12,10 +12,10 @@ process.load('Configuration.StandardSequences.Services_cff')
 process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
 process.load('FWCore.MessageService.MessageLogger_cfi')
 #process.load('SimGeneral.MixingModule.mixNoPU_cfi')
-process.load("SLHCUpgradeSimulations.Geometry.mixLowLumPU_Phase1_R39F16_HCal_cff")
-process.load("SLHCUpgradeSimulations.Geometry.Phase1_R39F16_HCal_cmsSimIdealGeometryXML_cff")
+process.load("SLHCUpgradeSimulations.Geometry.mixLowLumPU_Phase1_R34F16_HCal_cff")
+process.load("SLHCUpgradeSimulations.Geometry.Phase1_R34F16_HCal_cmsSimIdealGeometryXML_cff")
 process.load('Configuration.StandardSequences.MagneticField_38T_cff')
-process.load('SLHCUpgradeSimulations.Geometry.Digi_Phase1_R39F16_HCal_cff')
+process.load('SLHCUpgradeSimulations.Geometry.Digi_Phase1_R34F16_HCal_cff')
 process.load('Configuration.StandardSequences.SimL1Emulator_cff')
 process.load('Configuration.StandardSequences.Reconstruction_cff')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
@@ -23,7 +23,7 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.load('Configuration.EventContent.EventContent_cff')
 
 process.configurationMetadata = cms.untracked.PSet(
-    version = cms.untracked.string('$Revision: 1.2 $'),
+    version = cms.untracked.string('$Revision: 1.3 $'),
     annotation = cms.untracked.string('step2 nevts:100'),
     name = cms.untracked.string('PyReleaseValidation')
 )
@@ -86,7 +86,7 @@ process.simSiPixelDigis.AddPixelInefficiency = 20
 ## TIB1,2 inefficiency at 99% (i.e. dead)
 #process.simSiStripDigis.Inefficiency = 40
 
-process.load("SLHCUpgradeSimulations.Geometry.fakeConditions_Phase1_R39F16_HCal_cff")
+process.load("SLHCUpgradeSimulations.Geometry.fakeConditions_Phase1_R34F16_HCal_cff")
 process.load("SLHCUpgradeSimulations.Geometry.recoFromSimDigis_cff")
 process.load("SLHCUpgradeSimulations.Geometry.upgradeTracking_phase1_cff")
 

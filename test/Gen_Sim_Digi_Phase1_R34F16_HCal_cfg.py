@@ -6,9 +6,9 @@ process.load("FWCore.MessageService.MessageLogger_cfi")
 process.load("Configuration.StandardSequences.Services_cff")
 
 #process.load('SimGeneral.MixingModule.mixNoPU_cfi')
-process.load('SLHCUpgradeSimulations.Configuration.mixLowLumPU_Phase1_R39F16_HCal_cff')
+process.load('SLHCUpgradeSimulations.Configuration.mixLowLumPU_Phase1_R34F16_HCal_cff')
 #process.load('Configuration.StandardSequences.GeometryExtended_cff')
-process.load('SLHCUpgradeSimulations.Geometry.Phase1_R39F16_cmsSimIdealGeometryXML_cff')
+process.load('SLHCUpgradeSimulations.Geometry.Phase1_R34F16_cmsSimIdealGeometryXML_cff')
 process.load('Configuration.StandardSequences.MagneticField_38T_cff')
 process.load('Configuration.StandardSequences.Generator_cff')
 process.load('IOMC.EventVertexGenerators.VtxSmearedGauss_cfi')
@@ -18,12 +18,12 @@ process.load("Configuration.StandardSequences.SimulationRandomNumberGeneratorSee
 process.load("Configuration.StandardSequences.Sim_cff")
 process.load("SimGeneral.HepPDTESSource.pythiapdt_cfi")
 #process.load("Configuration.StandardSequences.Digi_cff")
-process.load('SLHCUpgradeSimulations.Geometry.Digi_Phase1_R39F16_cff')
+process.load('SLHCUpgradeSimulations.Geometry.Digi_Phase1_R34F16_cff')
 
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 #process.load("Configuration.StandardSequences.FakeConditions_cff")
 process.GlobalTag.globaltag = 'DESIGN42_V11::All'
-process.load("SLHCUpgradeSimulations.Geometry.fakeConditions_Phase1_R39F16_cff")
+process.load("SLHCUpgradeSimulations.Geometry.fakeConditions_Phase1_R34F16_cff")
 
 # use hardcoded values
 process.es_hardcode.toGet.extend(['Gains', 'Pedestals', 'PedestalWidths', 'QIEData', 'ElectronicsMap','ChannelQuality','RespCorrs','ZSThresholds','LutMetadata','L1TriggerObjects','TimeCorrs','PFCorrs','LUTCorrs'])
