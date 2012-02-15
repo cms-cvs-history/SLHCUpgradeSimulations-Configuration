@@ -83,7 +83,7 @@ process.ecalGlobalUncalibRecHit.EEdigiCollection = cms.InputTag("simEcalDigis","
 #process.mix.input.nbPileupEvents.averageNumber = 0.
 process.hcalupgradereco.digiLabel = "simHcalUnsuppressedDigis"
 
-process.p0 = cms.Path(process.simHcalUnsuppressedDigis+process.ecalLocalRecoSequence_nopreshower+process.hcalupgradereco+process.hcalRecHitDump+process.calotowermaker+process.caloTowerDump)
+process.p0 = cms.Path(process.ecalLocalRecoSequence_nopreshower+process.hcalupgradereco+process.hcalRecHitDump+process.calotowermaker+process.caloTowerDump)
 process.outpath = cms.EndPath(process.output)
 process.schedule = cms.Schedule(process.p0,process.outpath)
 
