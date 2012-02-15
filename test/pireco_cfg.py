@@ -1,5 +1,5 @@
 # Generate a Gen-Sim Digi file with cmsDriver.py with the following options
-# cmsDriver.py SLHCUpgradeSimulations/Configuration/python/FourMuPt_1_200_cfi -n 5 -s GEN,SIM,DIGI --conditions DESIGN42_V17::All --eventcontent FEVTDEBUG --beamspot Gauss --slhc Phase1_R30F12_HCal --datatier GEN-SIM-DIGI --no_exec
+# cmsDriver.py SLHCUpgradeSimulations/Configuration/python/FourPiPt_1_50_cfi -n 5 -s GEN,SIM,DIGI --conditions DESIGN42_V17::All --eventcontent FEVTDEBUG --beamspot Gauss --slhc Phase1_R30F12_HCal --datatier GEN-SIM-DIGI --no_exec
 # Then run Reco over it with this
 # Passed down a couple times with changes, but it originally came from /afs/cern.ch/user/r/rpw/public/SLHC
 import FWCore.ParameterSet.Config as cms
@@ -39,7 +39,7 @@ process.es_prefer_hcalHardcode = cms.ESPrefer("HcalHardcodeCalibrations", "es_ha
 process.source = cms.Source("PoolSource",
     firstEvent = cms.untracked.uint32(1),
     fileNames = cms.untracked.vstring(
-      'file:FourMuPt_1_200_cfi_GEN_SIM_DIGI.root'
+      'file:FourPiPt_1_50_cfi_GEN_SIM_DIGI.root'
   )
 )
 
@@ -83,7 +83,7 @@ process.ecalGlobalUncalibRecHit.EEdigiCollection = cms.InputTag("simEcalDigis","
 #process.mix.input.nbPileupEvents.averageNumber = 0.
 process.hcalupgradereco.digiLabel = "simHcalUnsuppressedDigis"
 
-process.p0 = cms.Path(process.ecalLocalRecoSequence_nopreshower+process.hcalupgradereco+process.hcalRecHitDump+process.calotowermaker+process.caloTowerDump)
+process.p0 = cms.Path(process.simHcalUnsuppressedDigis+process.ecalLocalRecoSequence_nopreshower+process.hcalupgradereco+process.hcalRecHitDump+process.calotowermaker+process.caloTowerDump)
 process.outpath = cms.EndPath(process.output)
 process.schedule = cms.Schedule(process.p0,process.outpath)
 
