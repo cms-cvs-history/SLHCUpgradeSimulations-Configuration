@@ -23,7 +23,7 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.load('Configuration.EventContent.EventContent_cff')
 
 process.configurationMetadata = cms.untracked.PSet(
-    version = cms.untracked.string('$Revision: 1.1 $'),
+    version = cms.untracked.string('$Revision: 1.2 $'),
     annotation = cms.untracked.string('step2 nevts:100'),
     name = cms.untracked.string('PyReleaseValidation')
 )
@@ -37,7 +37,7 @@ process.options = cms.untracked.PSet(
 # Input source
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-	'file:FourMuPt_1_200_R30F12_HCal_GEN_SIM.root'
+       '/store/mc/Summer12/FourPiPt_1_50/GEN-SIM/DESIGN42_V17_SLHChcal2-v1/0000/9864E4F3-DF5D-E111-A591-001D0967D4EF.root' 
     )
 )
 # Output definition
