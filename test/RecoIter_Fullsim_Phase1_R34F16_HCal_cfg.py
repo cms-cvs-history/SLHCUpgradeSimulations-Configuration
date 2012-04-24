@@ -11,8 +11,8 @@ process = cms.Process('RECO')
 process.load('Configuration.StandardSequences.Services_cff')
 process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
 process.load('FWCore.MessageService.MessageLogger_cfi')
-#process.load('SimGeneral.MixingModule.mixNoPU_cfi')
-process.load("SLHCUpgradeSimulations.Geometry.mixLowLumPU_Phase1_R34F16_HCal_cff")
+process.load('SimGeneral.MixingModule.mixNoPU_cfi')
+#process.load("SLHCUpgradeSimulations.Geometry.mixLowLumPU_Phase1_R34F16_HCal_cff")
 process.load("SLHCUpgradeSimulations.Geometry.Phase1_R34F16_HCal_cmsSimIdealGeometryXML_cff")
 process.load('Configuration.StandardSequences.MagneticField_38T_cff')
 process.load('SLHCUpgradeSimulations.Geometry.Digi_Phase1_R34F16_HCal_cff')
@@ -23,7 +23,7 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.load('Configuration.EventContent.EventContent_cff')
 
 process.configurationMetadata = cms.untracked.PSet(
-    version = cms.untracked.string('$Revision: 1.2 $'),
+    version = cms.untracked.string('$Revision: 1.3 $'),
     annotation = cms.untracked.string('step2 nevts:100'),
     name = cms.untracked.string('PyReleaseValidation')
 )
@@ -37,8 +37,7 @@ process.options = cms.untracked.PSet(
 # Input source
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-       '/store/mc/Summer11/FourMuPt_1_200/GEN-SIM/DESIGN42_V11_428_SLHChcal-v1/0003/3277D343-0B33-E111-8437-00259048AE70.root',
-       '/store/mc/Summer11/FourMuPt_1_200/GEN-SIM/DESIGN42_V11_428_SLHChcal-v1/0003/309776BD-0733-E111-BB09-00259048AE4E.root'
+       'file:FourPiPt_1_50_cfi_GEN_SIM.root'
     )
 )
 # Output definition
@@ -74,11 +73,11 @@ process.Timing =  cms.Service("Timing")
 #process.MessageLogger.destinations = cms.untracked.vstring("detailedInfo_fullph1geom")
 
 ### if pileup we need to set the number
-process.mix.input.nbPileupEvents = cms.PSet(
-  averageNumber = cms.double(3.0)
-)
+#process.mix.input.nbPileupEvents = cms.PSet(
+#  averageNumber = cms.double(3.0)
+#)
 ### if doing inefficiency at <PU>=50
-process.simSiPixelDigis.AddPixelInefficiency = 20
+#process.simSiPixelDigis.AddPixelInefficiency = 20
 ## also for strips TIB inefficiency if we want
 ## TIB1,2 inefficiency at 20%
 #process.simSiStripDigis.Inefficiency = 20
@@ -118,18 +117,18 @@ process.MeasurementTracker.UseStripAPVFiberQualityDB   = cms.bool(False)
 process.MeasurementTracker.UseStripStripQualityDB      = cms.bool(False)
 process.MeasurementTracker.UsePixelModuleQualityDB     = cms.bool(False)
 process.MeasurementTracker.UsePixelROCQualityDB        = cms.bool(False)
-process.lowPtTripletStepMeasurementTracker.inactiveStripDetectorLabels = cms.VInputTag()
-process.lowPtTripletStepMeasurementTracker.UseStripModuleQualityDB     = cms.bool(False)
-process.lowPtTripletStepMeasurementTracker.UseStripAPVFiberQualityDB   = cms.bool(False)
-process.lowPtTripletStepMeasurementTracker.UseStripStripQualityDB      = cms.bool(False)
-process.lowPtTripletStepMeasurementTracker.UsePixelModuleQualityDB     = cms.bool(False)
-process.lowPtTripletStepMeasurementTracker.UsePixelROCQualityDB        = cms.bool(False)
-process.pixelPairStepMeasurementTracker.inactiveStripDetectorLabels = cms.VInputTag()
-process.pixelPairStepMeasurementTracker.UseStripModuleQualityDB     = cms.bool(False)
-process.pixelPairStepMeasurementTracker.UseStripAPVFiberQualityDB   = cms.bool(False)
-process.pixelPairStepMeasurementTracker.UseStripStripQualityDB      = cms.bool(False)
-process.pixelPairStepMeasurementTracker.UsePixelModuleQualityDB     = cms.bool(False)
-process.pixelPairStepMeasurementTracker.UsePixelROCQualityDB        = cms.bool(False)
+#process.lowPtTripletStepMeasurementTracker.inactiveStripDetectorLabels = cms.VInputTag()
+#process.lowPtTripletStepMeasurementTracker.UseStripModuleQualityDB     = cms.bool(False)
+#process.lowPtTripletStepMeasurementTracker.UseStripAPVFiberQualityDB   = cms.bool(False)
+#process.lowPtTripletStepMeasurementTracker.UseStripStripQualityDB      = cms.bool(False)
+#process.lowPtTripletStepMeasurementTracker.UsePixelModuleQualityDB     = cms.bool(False)
+#process.lowPtTripletStepMeasurementTracker.UsePixelROCQualityDB        = cms.bool(False)
+#process.pixelPairStepMeasurementTracker.inactiveStripDetectorLabels = cms.VInputTag()
+#process.pixelPairStepMeasurementTracker.UseStripModuleQualityDB     = cms.bool(False)
+#process.pixelPairStepMeasurementTracker.UseStripAPVFiberQualityDB   = cms.bool(False)
+#process.pixelPairStepMeasurementTracker.UseStripStripQualityDB      = cms.bool(False)
+#process.pixelPairStepMeasurementTracker.UsePixelModuleQualityDB     = cms.bool(False)
+#process.pixelPairStepMeasurementTracker.UsePixelROCQualityDB        = cms.bool(False)
 process.detachedTripletStepMeasurementTracker.inactiveStripDetectorLabels = cms.VInputTag()
 process.detachedTripletStepMeasurementTracker.UseStripModuleQualityDB     = cms.bool(False)
 process.detachedTripletStepMeasurementTracker.UseStripAPVFiberQualityDB   = cms.bool(False)
@@ -169,7 +168,8 @@ process.trackValidator.label=cms.VInputTag(cms.InputTag("generalTracks"),
                                            cms.InputTag("cutsRecoTracksHp"),
                                            cms.InputTag("cutsRecoTracksHpwbtagc"),
                                            cms.InputTag("cutsRecoTracksZeroHp"),
-                                           cms.InputTag("cutsRecoTracksFirstHp")
+                                           cms.InputTag("cutsRecoTracksFirstHp"),
+                                           cms.InputTag("cutsRecoTracksSecondHp")
                                            )
 #process.trackValidator.associators = ['TrackAssociatorByHits']
 process.trackValidator.associators = cms.vstring('quickTrackAssociatorByHits')
@@ -206,6 +206,7 @@ process.slhcTracksValidation = cms.Sequence(process.cutsRecoTracksHp*
                                  process.cutsRecoTracksHpwbtagc*
                                  process.cutsRecoTracksZeroHp*
                                  process.cutsRecoTracksFirstHp*
+                                 process.cutsRecoTracksSecondHp*
                                  process.trackValidator)
 
 ############ end John's changes ###########################
