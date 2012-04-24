@@ -55,7 +55,7 @@ HCalUpgradeRECOSIMEventContent.extend([
     #'keep *_calotowermaker_*_*',
     'keep *_hbheprereco_*_*',
     #'keep *_simEcalUnsuppressedDigis_*_*',
-    #'keep *_ecalDigis_*_*'
+    'keep *_*_*_*'
     ])
 
 process.output = cms.OutputModule("PoolOutputModule",
@@ -224,7 +224,65 @@ process.horeco.digiLabel = "simHcalUnsuppressedDigis"
 process.hfreco.digiLabel = "simHcalUnsuppressedDigis"
 process.hcalupgradereco.digiLabel = "simHcalUnsuppressedDigis"
 
-process.reconstruction_step = cms.Path(process.ecalLocalRecoSequence_nopreshower+process.hbheprereco+process.horeco+process.hfreco+process.hcalupgradereco+process.towerMaker)
+#process.reconstruction_step = cms.Path(process.ecalLocalRecoSequence_nopreshower+process.hbheprereco+process.horeco+process.hfreco+process.hcalupgradereco+process.towerMaker)
+
+### Known additions to Reco from Jake ##############################################
+
+### Place to add in the reco steps one by one ######################################
+process.calolocalrecoA = cms.Sequence(process.ecalGlobalUncalibRecHit+
+				process.ecalDetIdToBeRecovered+
+				process.ecalRecHit+
+				process.ecalCompactTrigPrim+
+				process.ecalTPSkim+
+				process.ecalPreshowerRecHit+
+				#None+None+None+
+				# Hack in Jake's local Reco
+				process.hbheprereco+process.horeco+process.hfreco+process.hcalupgradereco+process.towerMaker
+				#process.zdcreco
+				)
+# process.ecalLocalRecoSequence_nopreshower = cms.Sequence(ecalGlobalUncalibRecHit+ecalRecHit)    
+# process.calolocalreco cms.Sequence(ecalGlobalUncalibRecHit+ecalDetIdToBeRecovered+ecalRecHit+
+#         ecalCompactTrigPrim+ecalTPSkim+ecalPreshowerRecHit+hbheprereco+hfreco+horeco+zdcreco)
+
+process.localrecoA  = cms.Sequence(process.trackerlocalreco+
+				process.muonlocalreco+
+				process.calolocalrecoA+
+				process.castorreco+
+				process.lumiProducer
+				)
+process.globalrecoA = cms.Sequence(process.offlineBeamSpot*
+                          process.recopixelvertexing*
+                          process.trackingGlobalReco*
+                          process.hcalGlobalRecoSequence*
+                          process.particleFlowCluster*
+                          process.ecalClusters*
+                          process.caloTowersRec*
+                          process.vertexreco*
+                          process.egammaGlobalReco*
+                          process.pfTrackingGlobalReco*
+                          process.jetGlobalReco*
+                          process.muonrecoComplete*
+                          process.muoncosmicreco*
+                          process.CastorFullReco
+			  )
+process.highlevelrecoA = cms.Sequence(process.egammaHighLevelRecoPrePF*
+                             process.particleFlowReco*
+                             process.egammaHighLevelRecoPostPF*
+                             process.jetHighLevelReco*
+                             process.tautagging*
+                             process.metrecoPlusHCALNoise*
+                             process.btagging*
+                             process.recoPFMET*
+                             process.PFTau*
+                             process.regionalCosmicTracksSeq*
+                             process.muoncosmichighlevelreco*
+                             process.reducedRecHits
+                             )
+process.reconstructionA = cms.Sequence(	process.localrecoA        *
+					#process.globalrecoA      *
+					#process.highlevelrecoA   *
+					process.logErrorHarvester
+					)
 
 ### back to standard job commands ##################################################
 process.DigiToRaw.remove(process.castorRawData)
@@ -243,7 +301,7 @@ process.digi2raw_step = cms.Path(process.DigiToRaw)
 process.raw2digi_step = cms.Path(process.RawToDigi)
 process.L1Reco_step = cms.Path(process.L1Reco)
 
-#process.reconstruction_step 	= cms.Path(process.reconstruction)
+process.reconstruction_step 	= cms.Path(process.reconstructionA)
 process.mix_step 		= cms.Path(process.mix)
 process.debug_step 		= cms.Path(process.anal)
 process.user_step 		= cms.Path(process.ReadLocalMeasurement)
