@@ -12,10 +12,10 @@ process.load('Configuration.StandardSequences.Services_cff')
 process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
 process.load('FWCore.MessageService.MessageLogger_cfi')
 process.load('SimGeneral.MixingModule.mixNoPU_cfi')
-#process.load("SLHCUpgradeSimulations.Geometry.mixLowLumPU_Phase1_R30F12_cff")
-process.load("SLHCUpgradeSimulations.Geometry.Phase1_R30F12_cmsSimIdealGeometryXML_cff")
+#process.load("SLHCUpgradeSimulations.Geometry.mixLowLumPU_Phase1_R30F12_HCal_cff")
+process.load("SLHCUpgradeSimulations.Geometry.Phase1_R30F12_HCal_cmsSimIdealGeometryXML_cff")
 process.load('Configuration.StandardSequences.MagneticField_38T_cff')
-process.load('SLHCUpgradeSimulations.Geometry.Digi_Phase1_R30F12_cff')
+process.load('SLHCUpgradeSimulations.Geometry.Digi_Phase1_R30F12_HCal_cff')
 process.load('Configuration.StandardSequences.SimL1Emulator_cff')
 process.load('Configuration.StandardSequences.DigiToRaw_cff')
 process.load('Configuration.StandardSequences.RawToDigi_cff')
@@ -26,7 +26,7 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.load('Configuration.EventContent.EventContent_cff')
 
 process.configurationMetadata = cms.untracked.PSet(
-    version = cms.untracked.string('$Revision: 1.15 $'),
+    version = cms.untracked.string('$Revision: 1.1 $'),
     annotation = cms.untracked.string('step2 nevts:100'),
     name = cms.untracked.string('PyReleaseValidation')
 )
@@ -40,24 +40,35 @@ process.options = cms.untracked.PSet(
 # Input source
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-       '/store/mc/Summer12/TTbar_Tauola_14TeV/GEN-SIM/DESIGN42_V17_SLHCTk-v1/0000/4815ECA9-255E-E111-A0C9-00151796D774.root',
-       '/store/mc/Summer12/TTbar_Tauola_14TeV/GEN-SIM/DESIGN42_V17_SLHCTk-v1/0000/56C5D376-CC5D-E111-8393-0024E86E8D9A.root',
-       '/store/mc/Summer12/TTbar_Tauola_14TeV/GEN-SIM/DESIGN42_V17_SLHCTk-v1/0000/74EC88AA-E45D-E111-AD1A-0026B94E27FD.root',
-       '/store/mc/Summer12/TTbar_Tauola_14TeV/GEN-SIM/DESIGN42_V17_SLHCTk-v1/0000/8C2D3998-155E-E111-B75C-00266CF2454C.root',
-       '/store/mc/Summer12/TTbar_Tauola_14TeV/GEN-SIM/DESIGN42_V17_SLHCTk-v1/0000/B6409F8D-DC5D-E111-8DDB-0026B94D1B16.root'
+	'file:FourPiPt_1_50_cfi_GEN_SIM.root'
     )
 )
 # Output definition
+HCalUpgradeRECOSIMEventContent = cms.untracked.vstring()
+HCalUpgradeRECOSIMEventContent.extend(process.RECOSIMEventContent.outputCommands)
+HCalUpgradeRECOSIMEventContent.extend([
+    #'keep *_hcalDigis_*_*',
+    'keep *_simHcalUnsuppressedDigis_*_*',
+    #'keep *_simHcalDigis_*_*',
+    #'keep *_simEcalDigis_*_*',
+    'keep *_hcalupgradereco_*_*',
+    #'keep *_calotowermaker_*_*',
+    'keep *_hbheprereco_*_*',
+    #'keep *_simEcalUnsuppressedDigis_*_*',
+    #'keep *_ecalDigis_*_*'
+    ])
+
 process.output = cms.OutputModule("PoolOutputModule",
     splitLevel = cms.untracked.int32(0),
-    outputCommands = process.RECOSIMEventContent.outputCommands,
-    #outputCommands = cms.untracked.vstring('keep *','drop *_mix_*_*'),
+    eventAutoFlushCompressedSize = cms.untracked.int32(5242880),
+    outputCommands = HCalUpgradeRECOSIMEventContent,
     fileName = cms.untracked.string('file:reco.root'),
     dataset = cms.untracked.PSet(
         dataTier = cms.untracked.string('GEN-SIM-RECO'),
         filterName = cms.untracked.string('')
     )
 )
+
 #I'm only interested in the validation stuff
 #process.output.outputCommands = cms.untracked.vstring('drop *','keep *_MEtoEDMConverter_*_*')
 
@@ -93,7 +104,7 @@ process.Timing =  cms.Service("Timing")
 ## TIB1,2 inefficiency at 99% (i.e. dead)
 #process.simSiStripDigis.Inefficiency = 40
 
-process.load("SLHCUpgradeSimulations.Geometry.fakeConditions_Phase1_R30F12_cff")
+process.load("SLHCUpgradeSimulations.Geometry.fakeConditions_Phase1_R30F12_HCal_cff")
 process.load("SLHCUpgradeSimulations.Geometry.recoFromSimDigis_cff")
 process.load("SLHCUpgradeSimulations.Geometry.upgradeTracking_phase1_cff")
 
@@ -187,6 +198,34 @@ process.anal = cms.EDAnalyzer("EventContentAnalyzer")
 ## need this at the end as the validation config redefines random seed with just mix
 #process.load("IOMC.RandomEngine.IOMC_cff")
 
+### Now add the HCal upgrade Reco ##################################################
+# Path and EndPath definitions
+process.load("RecoLocalCalo.HcalRecProducers.HcalUpgradeReconstructor_cff")
+process.load("RecoJets.Configuration.CaloTowersRec_cff")
+process.load("RecoLocalCalo.HcalRecAlgos.hcalRecAlgoESProd_cfi")
+process.load("RecoLocalCalo.Configuration.RecoLocalCalo_cff")
+#process.load("RecoLocalCalo.CaloTowersCreator.calotowermaker_cfi")
+
+process.ecalGlobalUncalibRecHit.EBdigiCollection = cms.InputTag("simEcalDigis","ebDigis")
+process.ecalGlobalUncalibRecHit.EEdigiCollection = cms.InputTag("simEcalDigis","eeDigis")
+process.ecalRecHit.ebDetIdToBeRecovered = cms.InputTag("","")
+process.ecalRecHit.eeDetIdToBeRecovered = cms.InputTag("","")
+process.ecalRecHit.eeFEToBeRecovered = cms.InputTag("","")
+process.ecalRecHit.ebFEToBeRecovered = cms.InputTag("","")
+process.ecalRecHit.recoverEBFE = cms.bool(False)
+process.ecalRecHit.recoverEEFE = cms.bool(False)
+
+process.load("RecoLocalCalo.HcalRecProducers.HcalSimpleReconstructor_hbhe_cfi")
+process.load("RecoLocalCalo.HcalRecProducers.HcalSimpleReconstructor_ho_cfi")
+process.load("RecoLocalCalo.HcalRecProducers.HcalSimpleReconstructor_hf_cfi")
+
+process.hbheprereco.digiLabel = "simHcalUnsuppressedDigis"
+process.horeco.digiLabel = "simHcalUnsuppressedDigis"
+process.hfreco.digiLabel = "simHcalUnsuppressedDigis"
+process.hcalupgradereco.digiLabel = "simHcalUnsuppressedDigis"
+
+process.reconstruction_step = cms.Path(process.ecalLocalRecoSequence_nopreshower+process.hbheprereco+process.horeco+process.hfreco+process.hcalupgradereco+process.towerMaker)
+
 ### back to standard job commands ##################################################
 process.DigiToRaw.remove(process.castorRawData)
 
@@ -204,7 +243,7 @@ process.digi2raw_step = cms.Path(process.DigiToRaw)
 process.raw2digi_step = cms.Path(process.RawToDigi)
 process.L1Reco_step = cms.Path(process.L1Reco)
 
-process.reconstruction_step 	= cms.Path(process.reconstruction)
+#process.reconstruction_step 	= cms.Path(process.reconstruction)
 process.mix_step 		= cms.Path(process.mix)
 process.debug_step 		= cms.Path(process.anal)
 process.user_step 		= cms.Path(process.ReadLocalMeasurement)
