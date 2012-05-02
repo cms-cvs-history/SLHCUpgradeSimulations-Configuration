@@ -31,7 +31,7 @@ process.configurationMetadata = cms.untracked.PSet(
     name = cms.untracked.string('PyReleaseValidation')
 )
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(5)
+    input = cms.untracked.int32(2)
 )
 process.options = cms.untracked.PSet(
   wantSummary = cms.untracked.bool(True)
@@ -224,66 +224,69 @@ process.horeco.digiLabel = "simHcalUnsuppressedDigis"
 process.hfreco.digiLabel = "simHcalUnsuppressedDigis"
 process.hcalupgradereco.digiLabel = "simHcalUnsuppressedDigis"
 
-#process.reconstruction_step = cms.Path(process.ecalLocalRecoSequence_nopreshower+process.hbheprereco+process.horeco+process.hfreco+process.hcalupgradereco+process.towerMaker)
+### Known alterations for Reco #####################################################
+delattr(process,"hbhereco")
+process.hbhereco = process.hbheprereco.clone()
+#process.hcalLocalRecoSequence.replace(process.hbheprereco,process.hbhereco)
 
-### Known additions to Reco from Jake ##############################################
+process.metrecoPlusHCALNoise.remove(process.BeamHaloSummary)
+process.metrecoPlusHCALNoise.remove(process.GlobalHaloData)
+process.metrecoPlusHCALNoise.remove(process.HcalHaloData)
+
+process.metrecoPlusHCALNoise.remove(process.hcalnoise)
+process.jetGlobalReco = cms.Sequence(process.recoJets*process.recoTrackJets)
+process.jetHighLevelReco = cms.Sequence(process.recoJetAssociations*process.recoPFJets*process.recoJPTJets)
 
 ### Place to add in the reco steps one by one ######################################
-process.calolocalrecoA = cms.Sequence(process.ecalGlobalUncalibRecHit+
+process.calolocalreco = cms.Sequence(process.ecalGlobalUncalibRecHit+
 				process.ecalDetIdToBeRecovered+
 				process.ecalRecHit+
 				process.ecalCompactTrigPrim+
 				process.ecalTPSkim+
 				process.ecalPreshowerRecHit+
-				#None+None+None+
-				# Hack in Jake's local Reco
-				process.hbheprereco+process.horeco+process.hfreco+process.hcalupgradereco+process.towerMaker
-				#process.zdcreco
+				process.hbheprereco+process.horeco+process.hfreco+process.hcalupgradereco+process.towerMaker+
+				process.hbhereco
+				#+process.zdcreco
 				)
-# process.ecalLocalRecoSequence_nopreshower = cms.Sequence(ecalGlobalUncalibRecHit+ecalRecHit)    
-# process.calolocalreco cms.Sequence(ecalGlobalUncalibRecHit+ecalDetIdToBeRecovered+ecalRecHit+
-#         ecalCompactTrigPrim+ecalTPSkim+ecalPreshowerRecHit+hbheprereco+hfreco+horeco+zdcreco)
-
-process.localrecoA  = cms.Sequence(process.trackerlocalreco+
+process.localreco  = cms.Sequence(process.trackerlocalreco+
 				process.muonlocalreco+
-				process.calolocalrecoA+
+				process.calolocalreco+
 				process.castorreco+
 				process.lumiProducer
 				)
-process.globalrecoA = cms.Sequence(process.offlineBeamSpot*
-                          process.recopixelvertexing*
-                          process.trackingGlobalReco*
-                          process.hcalGlobalRecoSequence*
-                          process.particleFlowCluster*
-                          process.ecalClusters*
-                          process.caloTowersRec*
-                          process.vertexreco*
-                          process.egammaGlobalReco*
-                          process.pfTrackingGlobalReco*
-                          process.jetGlobalReco*
-                          process.muonrecoComplete*
-                          process.muoncosmicreco*
-                          process.CastorFullReco
+process.globalreco = cms.Sequence(process.offlineBeamSpot
+                          *process.recopixelvertexing
+                          *process.trackingGlobalReco
+                          #*process.hcalGlobalRecoSequence 
+                          *process.particleFlowCluster
+                          *process.ecalClusters
+                          *process.caloTowersRec
+                          *process.vertexreco
+                          *process.egammaGlobalReco
+                          *process.pfTrackingGlobalReco
+                          *process.jetGlobalReco
+                          *process.muonrecoComplete
+                          *process.muoncosmicreco
+                          *process.CastorFullReco
 			  )
-process.highlevelrecoA = cms.Sequence(process.egammaHighLevelRecoPrePF*
-                             process.particleFlowReco*
-                             process.egammaHighLevelRecoPostPF*
-                             process.jetHighLevelReco*
-                             process.tautagging*
-                             process.metrecoPlusHCALNoise*
-                             process.btagging*
-                             process.recoPFMET*
-                             process.PFTau*
-                             process.regionalCosmicTracksSeq*
-                             process.muoncosmichighlevelreco*
-                             process.reducedRecHits
+process.highlevelreco = cms.Sequence(process.egammaHighLevelRecoPrePF
+                             *process.particleFlowReco
+                             *process.egammaHighLevelRecoPostPF
+                             *process.jetHighLevelReco
+                             *process.tautagging
+                             *process.metrecoPlusHCALNoise 
+                             *process.btagging
+                             *process.recoPFMET
+                             *process.PFTau
+                             *process.regionalCosmicTracksSeq
+                             *process.muoncosmichighlevelreco
+                             *process.reducedRecHits
                              )
-process.reconstructionA = cms.Sequence(	process.localrecoA        *
-					#process.globalrecoA      *
-					#process.highlevelrecoA   *
+process.reconstruction = cms.Sequence(	process.localreco       *
+					process.globalreco      *
+					process.highlevelreco   *
 					process.logErrorHarvester
 					)
-
 ### back to standard job commands ##################################################
 process.DigiToRaw.remove(process.castorRawData)
 
@@ -301,7 +304,7 @@ process.digi2raw_step = cms.Path(process.DigiToRaw)
 process.raw2digi_step = cms.Path(process.RawToDigi)
 process.L1Reco_step = cms.Path(process.L1Reco)
 
-process.reconstruction_step 	= cms.Path(process.reconstructionA)
+process.reconstruction_step 	= cms.Path(process.reconstruction)
 process.mix_step 		= cms.Path(process.mix)
 process.debug_step 		= cms.Path(process.anal)
 process.user_step 		= cms.Path(process.ReadLocalMeasurement)
