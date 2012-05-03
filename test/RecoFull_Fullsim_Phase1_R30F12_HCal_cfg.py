@@ -244,8 +244,9 @@ process.calolocalreco = cms.Sequence(process.ecalGlobalUncalibRecHit+
 				process.ecalCompactTrigPrim+
 				process.ecalTPSkim+
 				process.ecalPreshowerRecHit+
-				process.hbheprereco+process.horeco+process.hfreco+process.hcalupgradereco+process.towerMaker+
-				process.hbhereco
+				#process.hbheprereco+
+				process.hbhereco+
+				process.horeco+process.hfreco+process.hcalupgradereco+process.towerMaker
 				#+process.zdcreco
 				)
 process.localreco  = cms.Sequence(process.trackerlocalreco+
