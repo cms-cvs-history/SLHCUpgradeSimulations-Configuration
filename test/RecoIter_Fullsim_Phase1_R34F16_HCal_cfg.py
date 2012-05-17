@@ -23,7 +23,7 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.load('Configuration.EventContent.EventContent_cff')
 
 process.configurationMetadata = cms.untracked.PSet(
-    version = cms.untracked.string('$Revision: 1.3 $'),
+    version = cms.untracked.string('$Revision: 1.4 $'),
     annotation = cms.untracked.string('step2 nevts:100'),
     name = cms.untracked.string('PyReleaseValidation')
 )
@@ -108,6 +108,7 @@ process.detachedTripletStepTracks.TTRHBuilder = cms.string('WithTrackAngle')
 process.mixedTripletStepTracks.TTRHBuilder = cms.string('WithTrackAngle')
 process.pixelLessStepTracks.TTRHBuilder = cms.string('WithTrackAngle')
 process.tobTecStepTracks.TTRHBuilder = cms.string('WithTrackAngle')
+process.highPtTripletStepTracks.TTRHBuilder = cms.string('WithTrackAngle')
 
 # Need these lines to stop some errors about missing siStripDigis collections.
 # should add them to fakeConditions_Phase1_cff
