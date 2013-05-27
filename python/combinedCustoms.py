@@ -2,10 +2,10 @@ import FWCore.ParameterSet.Config as cms
 from SLHCUpgradeSimulations.Configuration.postLS1Customs import customisePostLS1
 from SLHCUpgradeSimulations.Configuration.phase2TkCustomsBE import customise as customiseBE
 from SLHCUpgradeSimulations.Configuration.phase2TkCustoms_LB_6PS import customise as customiseLB6PS
-from SLHCUpgradeSimulations.Configuration.phase2TkCustoms_LB_6PS import customise as customiseLB4LPS_2L2S
+from SLHCUpgradeSimulations.Configuration.phase2TkCustoms_LB_4LPS_2L2S import customise as customiseLB4LPS_2L2S
 from SLHCUpgradeSimulations.Configuration.phase2TkCustomsBE import l1EventContent as customise_ev_BE
 from SLHCUpgradeSimulations.Configuration.phase2TkCustoms_LB_6PS import l1EventContent as customise_ev_LB6PS
-from SLHCUpgradeSimulations.Configuration.phase2TkCustoms_LB_6PS import l1EventContent as customise_ev_LB4LPS_2L2S
+from SLHCUpgradeSimulations.Configuration.phase2TkCustoms_LB_4LPS_2L2S import l1EventContent as customise_ev_LB4LPS_2L2S
 from SLHCUpgradeSimulations.Configuration.customise_mixing import customise_NoCrossing
 from SLHCUpgradeSimulations.Configuration.phase1TkCustoms import customise as customisePhase1Tk
 from SLHCUpgradeSimulations.Configuration.HCalCustoms import customise_HcalPhase1
@@ -157,4 +157,99 @@ def ecal_complete_aging_1000(process):
 
 def ecal_complete_aging_3000(process):
     process=aging.ecal_complete_aging_3000(process)
+    return process
+
+def fixEcalConditions_150(process):
+    if not hasattr(process.GlobalTag,'toGet'):
+        process.GLobalTag.toGet=cms.VPSet()
+    process.GlobalTag.toGet.extend( cms.VPSet(
+        cms.PSet(record = cms.string("EcalSRSettingsRcd"),
+                 tag = cms.string("EcalSRSettings_TL150_mc"),
+                 connect = cms.untracked.string("frontier://FrontierProd/CMS_COND_34X_ECAL")
+                 )
+        )
+                                    )
+    process.GlobalTag.toGet.extend( cms.VPSet(
+        cms.PSet(record = cms.string("EcalTPGLutIdMapRcd"),
+                 tag = cms.string("EcalTPGLutIdMap_beamv5_upgrade_mc"),
+                 connect = cms.untracked.string("frontier://FrontierProd/CMS_COND_34X_ECAL")
+                 )
+        )
+                                    )
+    return process
+
+def fixEcalConditions_300(process):
+    if not hasattr(process.GlobalTag,'toGet'):
+        process.GLobalTag.toGet=cms.VPSet()
+    process.GlobalTag.toGet.extend( cms.VPSet(
+        cms.PSet(record = cms.string("EcalSRSettingsRcd"),
+                 tag = cms.string("EcalSRSettings_TL300_mc"),
+                 connect = cms.untracked.string("frontier://FrontierProd/CMS_COND_34X_ECAL")
+                 )
+        )
+                                    )
+    process.GlobalTag.toGet.extend( cms.VPSet(
+        cms.PSet(record = cms.string("EcalTPGLutIdMapRcd"),
+                 tag = cms.string("EcalTPGLutIdMap_beamv5_upgrade_mc"),
+                 connect = cms.untracked.string("frontier://FrontierProd/CMS_COND_34X_ECAL")
+                 )
+        )
+                                    )
+    return process
+
+def fixEcalConditions_500(process):
+    if not hasattr(process.GlobalTag,'toGet'):
+        process.GLobalTag.toGet=cms.VPSet()
+    process.GlobalTag.toGet.extend( cms.VPSet(
+        cms.PSet(record = cms.string("EcalSRSettingsRcd"),
+                 tag = cms.string("EcalSRSettings_TL500_mc"),
+                 connect = cms.untracked.string("frontier://FrontierProd/CMS_COND_34X_ECAL")
+                 )
+        )
+                                    )
+    process.GlobalTag.toGet.extend( cms.VPSet(
+        cms.PSet(record = cms.string("EcalTPGLutIdMapRcd"),
+                 tag = cms.string("EcalTPGLutIdMap_beamv5_upgrade_mc"),
+                 connect = cms.untracked.string("frontier://FrontierProd/CMS_COND_34X_ECAL")
+                 )
+        )
+                                    )
+    return process
+
+def fixEcalConditions_1000(process):
+    if not hasattr(process.GlobalTag,'toGet'):
+        process.GLobalTag.toGet=cms.VPSet()
+    process.GlobalTag.toGet.extend( cms.VPSet(
+        cms.PSet(record = cms.string("EcalSRSettingsRcd"),
+                 tag = cms.string("EcalSRSettings_TL1000_mc"),
+                 connect = cms.untracked.string("frontier://FrontierProd/CMS_COND_34X_ECAL")
+                 )
+        )
+                                    )
+    process.GlobalTag.toGet.extend( cms.VPSet(
+        cms.PSet(record = cms.string("EcalTPGLutIdMapRcd"),
+                 tag = cms.string("EcalTPGLutIdMap_beamv5_upgrade_mc"),
+                 connect = cms.untracked.string("frontier://FrontierProd/CMS_COND_34X_ECAL")
+                 )
+        )
+                                    )
+    return process
+
+def fixEcalConditions_3000(process):
+    if not hasattr(process.GlobalTag,'toGet'):
+        process.GLobalTag.toGet=cms.VPSet()
+    process.GlobalTag.toGet.extend( cms.VPSet(
+        cms.PSet(record = cms.string("EcalSRSettingsRcd"),
+                 tag = cms.string("EcalSRSettings_TL3000_mc"),
+                 connect = cms.untracked.string("frontier://FrontierProd/CMS_COND_34X_ECAL")
+                 )
+        )
+                                    )
+    process.GlobalTag.toGet.extend( cms.VPSet(
+        cms.PSet(record = cms.string("EcalTPGLutIdMapRcd"),
+                 tag = cms.string("EcalTPGLutIdMap_beamv5_upgrade_mc"),
+                 connect = cms.untracked.string("frontier://FrontierProd/CMS_COND_34X_ECAL")
+                 )
+        )
+                                    )
     return process
