@@ -5,21 +5,12 @@ def customise(process):
         process=customise_DigiToRaw(process)
     if hasattr(process,'RawToDigi'):
         process=customise_RawToDigi(process)
-    n=0
-    if hasattr(process,'reconstruction') or hasattr(process,'dqmoffline_step'):
-        if hasattr(process,'mix'):
-            if hasattr(process.mix,'input'):
-                n=process.mix.input.nbPileupEvents.averageNumber.value()
-        else:
-            print 'phase1TkCustoms requires a --pileup option to cmsDriver to run the reconstruction/dqm'
-            print 'Please provide one!'
-            sys.exit(1)
     if hasattr(process,'reconstruction'):
-        process=customise_Reco(process,float(n))
+        process=customise_Reco(process)
     if hasattr(process,'digitisation_step'):
         process=customise_Digi(process)
     if hasattr(process,'dqmoffline_step'):
-        process=customise_DQM(process,n)
+        process=customise_DQM(process)
     if hasattr(process,'dqmHarvesting'):
         process=customise_harvesting(process)
     if hasattr(process,'validation_step'):
@@ -62,7 +53,7 @@ def customise_RawToDigi(process):
     process.raw2digi_step.remove(process.siPixelDigis)
     return process
 
-def customise_Reco(process,pileup):
+def customise_Reco(process):
     #this may be a trimmed out process with only local reco
     #if so, don't use the customize stuff
     ## need changes to mixedtriplets step to use for imcreasing high eta efficiency
@@ -101,22 +92,6 @@ def customise_Reco(process,pileup):
     process.convClusters.oldClusterRemovalInfo=cms.InputTag("mixedTripletStepClusters")
     process.convClusters.trajectories=cms.InputTag("mixedTripletStepTracks")
     process.convClusters.overrideTrkQuals= cms.InputTag("mixedTripletStep")
-    process.pixellayertriplets.layerList = cms.vstring( 'BPix1+BPix2+BPix3',
-                                                        'BPix2+BPix3+BPix4',
-                                                        'BPix1+BPix3+BPix4',
-                                                        'BPix1+BPix2+BPix4',
-                                                        'BPix2+BPix3+FPix1_pos',
-                                                        'BPix2+BPix3+FPix1_neg',
-                                                        'BPix1+BPix2+FPix1_pos',
-                                                        'BPix1+BPix2+FPix1_neg',
-                                                        'BPix2+FPix1_pos+FPix2_pos',
-                                                        'BPix2+FPix1_neg+FPix2_neg',
-                                                        'BPix1+FPix1_pos+FPix2_pos',
-                                                        'BPix1+FPix1_neg+FPix2_neg',
-                                                        'FPix1_pos+FPix2_pos+FPix3_pos',
-                                                        'FPix1_neg+FPix2_neg+FPix3_neg' )
-    process.MeasurementTracker.UsePixelROCQualityDB = cms.bool(False)
-    process.MeasurementTracker.UsePixelModuleQualityDB = cms.bool(False)
     process.mixedTripletStepSeedLayersA.layerList = cms.vstring('BPix1+BPix2+BPix3', 
         'BPix1+BPix2+FPix1_pos', 
         'BPix1+BPix2+FPix1_neg', 
@@ -124,14 +99,6 @@ def customise_Reco(process,pileup):
         'BPix1+FPix1_neg+FPix2_neg', 
         'BPix2+FPix1_pos+FPix2_pos', 
         'BPix2+FPix1_neg+FPix2_neg')
-    process.convLayerPairs.layerList = cms.vstring('BPix1+BPix2', 
-    	'BPix2+BPix3', 
-    	'BPix2+FPix1_pos', 
-    	'BPix2+FPix1_neg', 
-    	'BPix2+FPix2_pos', 
-    	'BPix2+FPix2_neg', 
-    	'FPix1_pos+FPix2_pos', 
-    	'FPix1_neg+FPix2_neg')
 
     process.earlyGeneralTracks.setsToMerge = cms.VPSet( cms.PSet( tLists=cms.vint32(0,1,2,3,4), pQual=cms.bool(True) ))
     process.earlyGeneralTracks.hasSelector=cms.vint32(1,1,1,1,1)
@@ -265,60 +232,4 @@ def l1EventContent(process):
             getattr(process,b).outputCommands.append('drop PSimHits_g4SimHits_EcalHitsEE_*')
             getattr(process,b).outputCommands.append('drop *_L1TkStubsFromSimHits_StubsFail_*')
     return process
-
-def customise_DQM(process,pileup):
-    # We cut down the number of iterative tracking steps
-#    process.dqmoffline_step.remove(process.TrackMonStep3)
-#    process.dqmoffline_step.remove(process.TrackMonStep4)
-#    process.dqmoffline_step.remove(process.TrackMonStep5)
-#    process.dqmoffline_step.remove(process.TrackMonStep6)
-    			    #The following two steps were removed
-                            #process.PixelLessStep*
-                            #process.TobTecStep*
-    process.dqmoffline_step.remove(process.muonAnalyzer)
-    process.dqmoffline_step.remove(process.jetMETAnalyzer)
-#    process.dqmoffline_step.remove(process.TrackMonStep9)
-#    process.dqmoffline_step.remove(process.TrackMonStep10)
-#    process.dqmoffline_step.remove(process.PixelTrackingRecHitsValid)
-
-    #put isUpgrade flag==true
-    process.SiPixelRawDataErrorSource.isUpgrade = cms.untracked.bool(True)
-    process.SiPixelDigiSource.isUpgrade = cms.untracked.bool(True)
-    process.SiPixelClusterSource.isUpgrade = cms.untracked.bool(True)
-    process.SiPixelRecHitSource.isUpgrade = cms.untracked.bool(True)
-    process.SiPixelTrackResidualSource.isUpgrade = cms.untracked.bool(True)
-    process.SiPixelHitEfficiencySource.isUpgrade = cms.untracked.bool(True)
-    
-    from DQM.TrackingMonitor.customizeTrackingMonitorSeedNumber import customise_trackMon_IterativeTracking_PHASE1PU140
-    from DQM.TrackingMonitor.customizeTrackingMonitorSeedNumber import customise_trackMon_IterativeTracking_PHASE1PU70
-    
-    if pileup>100:
-        process=customise_trackMon_IterativeTracking_PHASE1PU140(process)
-    else:
-        process=customise_trackMon_IterativeTracking_PHASE1PU70(process)
-    process.dqmoffline_step.remove(process.Phase1Pu70TrackMonStep2)
-    process.dqmoffline_step.remove(process.Phase1Pu70TrackMonStep4)
-    process.globalrechitsanalyze.ROUList = cms.vstring(
-       'g4SimHitsTrackerHitsPixelBarrelLowTof', 
-       'g4SimHitsTrackerHitsPixelBarrelHighTof', 
-       'g4SimHitsTrackerHitsPixelEndcapLowTof', 
-       'g4SimHitsTrackerHitsPixelEndcapHighTof')
-    return process
-
-def customise_Validation(process):
-    process.validation_step.remove(process.PixelTrackingRecHitsValid)
-    process.validation_step.remove(process.stripRecHitsValid)
-    process.validation_step.remove(process.StripTrackingRecHitsValid)
-    # We don't run the HLT
-    process.validation_step.remove(process.HLTSusyExoVal)
-    process.validation_step.remove(process.hltHiggsValidator)
-    process.validation_step.remove(process.relvalMuonBits)
-    return process
-
-def customise_harvesting(process):
-    process.dqmHarvesting.remove(process.jetMETDQMOfflineClient)
-    process.dqmHarvesting.remove(process.dataCertificationJetMET)
-    process.dqmHarvesting.remove(process.sipixelEDAClient)
-    process.dqmHarvesting.remove(process.sipixelCertification)
-    return (process)
 
